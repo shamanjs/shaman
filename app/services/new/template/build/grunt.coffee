@@ -41,7 +41,9 @@ gruntConfig =
         "build/webapp/public/":           "#{app.paths.client}/index.html"
 
   reload: {}
-    
+  jaded:
+    files: "#{app.paths.app}/views/**/*.jade"
+  
   watch:
     test:
       files: "<config:test.files>"
@@ -57,7 +59,7 @@ gruntConfig =
       ]
       tasks: "copy reload"
     jaded:
-      files: "build/webapp/client/templates/*.jade"
+      files: "<config:jaded.files>"
       tasks: "jaded reload"
     #jobs:
     #  files: "#{app.paths.app}/**/jobs/**/*.coffee"
@@ -95,21 +97,20 @@ module.exports = (grunt) ->
     contract = coffee.eval (grunt.file.read file), bare: true
     require('shaman').start contract, path.resolve(__dirname, '..')
 
-  ## grunt-jaded
-  grunt.registerTask "jaded", "compile jaded templates", ->
-  jaded = require 'jaded'  
-  {basename, extname}  = require 'path'
-  src   = app.paths.client + '/templates'
-  dest  = app.paths.public + '/templates'
-  grunt.file.recurse src,
-    (absolute, root, subdir, filename) ->
-      name = basename filename, extname filename
-      template = jaded.compile grunt.file.read(absolute), 
+ ## grunt-jaded
+  grunt.registerMultiTask "jaded", "compile jaded templates", ->
+    jaded = require 'jaded'  
+    files = grunt.file.expandFiles(@file.src)
+    {basename, extname}  = require 'path'
+    for file in files
+      n = basename file, extname file
+      template = jaded.compile grunt.file.read(file), 
         development: true
         rivets: false
         amd: true
-        filename: absolute
-      grunt.file.write "#{dest}/#{name}.js", template
+        filename: file
+      grunt.file.mkdir "#{app.paths.public}/views/"
+      grunt.file.write "#{app.paths.public}/views/"+n+".tpl.js" , template
 
   ## grunt-mocha-node
   grunt.registerMultiTask "test", "Run unit tests with Mocha", ->
