@@ -6,10 +6,10 @@ module.exports = (agent, root) ->
   agent.paths = require('../paths')(root)
   #agent.load ?= require '../load'
   agent.write ?= (path, data) ->
-    require('fs').writeFileSync "#{agent.paths.app}/#{path}", data
+    require('fs').writeFileSync "#{@paths.app}/#{path}", data
   agent.read ?= (path) ->
-    require('fs').readFileSync "#{agent.paths.app}/#{path}"
-  agent.log "starting agent '#{agent.name}'..."
+    require('fs').readFileSync "#{@paths.app}/#{path}"
+  agent.log "starting agent '#{@name}'..."
   # extend agent with jobs
   agent = require('../jobs')(agent)
   

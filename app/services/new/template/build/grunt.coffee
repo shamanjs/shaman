@@ -21,7 +21,7 @@ gruntConfig =
       options:
         bare: true
     services:
-      src: [ "#{app.paths.client}/js/services/*.coffee" ]
+      src: [ "#{app.paths.app}/views/**/*.coffee" ]
       dest:  "#{app.paths.public}/js/services"
       options:
         bare: true
@@ -92,12 +92,14 @@ module.exports = (grunt) ->
   ## default 
   grunt.registerTask "default", "test copy jaded coffee contract watch"
 
+  #grunt.registerTask "wipePublic", ""
+
   grunt.registerMultiTask "contract", "parse agent contract", -> 
     file = grunt.file.expandFiles(@file.src)[0]
     contract = coffee.eval (grunt.file.read file), bare: true
     require('shaman').start contract, path.resolve(__dirname, '..')
 
- ## grunt-jaded
+  ## grunt-jaded
   grunt.registerMultiTask "jaded", "compile jaded templates", ->
     jaded = require 'jaded'  
     files = grunt.file.expandFiles(@file.src)
@@ -109,8 +111,8 @@ module.exports = (grunt) ->
         rivets: false
         amd: true
         filename: file
-      grunt.file.mkdir "#{app.paths.public}/views/"
-      grunt.file.write "#{app.paths.public}/views/"+n+".tpl.js" , template
+      grunt.file.mkdir "#{app.paths.public}/templates/"
+      grunt.file.write "#{app.paths.public}/templates/"+n+".js" , template
 
   ## grunt-mocha-node
   grunt.registerMultiTask "test", "Run unit tests with Mocha", ->
