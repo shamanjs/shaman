@@ -1,0 +1,33 @@
+{
+  "name": "#{appName}",
+  "description": "Nothing here yet",
+  "version": "0.0.1",
+  "homepage": "http://github.com/#{github}/#{appName}",
+  "repository": "git://github.com/#{github}/#{appName}.git",
+  "author": "#{name} <#{email}> (#{website})",
+  "main": "./app/index.coffee",
+  "dependencies": {
+    "coffee-script": "*"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "uglify-js": "*",
+    "jaded": "*",
+    "grunt-reload": "*",
+    "grunt-coffee": "*",
+    "grunt-contrib": "~0.1.6"
+  },
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script"
+  },
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/#{github}/#{appName}/raw/master/LICENSE"
+    }
+  ]
+}
