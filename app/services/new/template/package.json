@@ -16,6 +16,8 @@
     "jaded": "*",
     "grunt-reload": "*",
     "grunt-coffee": "*",
+    "grunt-jaded": "*",
+    "grunt-simple-mocha": "*",
     "grunt-contrib": "~0.1.6"
   },
   "scripts": {

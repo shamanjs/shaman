@@ -5,13 +5,13 @@ path = require 'path'
 
 gruntConfig =
   pkg: "<json:package.json>"
-  test:
-    files: ["#{app.paths.app}/**/*.spec.coffee"]
-  mocha: 
-    options: 
-      reporter:    'spec'
-      ui:          'exports'
-      ignoreLeaks: 'true'
+  simplemocha: 
+    all:
+      src: ["#{app.paths.app}/**/*.spec.coffee"]
+      options: 
+        reporter:    'spec'
+        ui:          'exports'
+        ignoreLeaks: 'true'
   contract:
     files: "#{app.paths.app}/**/contract.coffee"
   coffee:
@@ -30,6 +30,14 @@ gruntConfig =
       dest:  "#{app.paths.public}/js/vendor"
       options:
         bare: true
+  jaded:
+    app:
+      src: [ "#{app.paths.app}/views/**/*.jade" ]
+      dest:  "#{app.paths.public}/templates"
+      options:
+        amd: true
+        development: false
+        rivets: true
   # dest: src 
   copy:
     dist: 
@@ -39,18 +47,11 @@ gruntConfig =
         "build/webapp/public/img/":       "#{app.paths.client}/img/**"
         "build/webapp/public/dev/":       "#{app.paths.client}/dev/**"
         "build/webapp/public/":           "#{app.paths.client}/index.html"
-
-  reload: {}
-  jaded:
-    files: "#{app.paths.app}/views/**/*.jade"
-  
+  reload: {}  
   watch:
-    test:
-      files: "<config:test.files>"
-      tasks: "test"
     services:
       files: "#{app.paths.app}/**/services/**/*.coffee"
-      tasks: "test"
+      tasks: "mocha"
     client: 
       files: [
         "#{app.paths.client}/js/vendor/**",
@@ -59,14 +60,8 @@ gruntConfig =
       ]
       tasks: "copy reload"
     jaded:
-      files: "<config:jaded.files>"
+      files: "<config:jaded.app.src>"
       tasks: "jaded reload"
-    #jobs:
-    #  files: "#{app.paths.app}/**/jobs/**/*.coffee"
-    #  tasks: "test"
-    util:
-      files: "#{app.paths.app}/**/util/**/*.coffee"
-      tasks: "test"
     contract:
       files: "<config:contract.files>"
       tasks: "contract"
@@ -88,9 +83,11 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib"
   grunt.loadNpmTasks "grunt-reload"
   grunt.loadNpmTasks "grunt-coffee"
+  grunt.loadNpmTasks "grunt-jaded"
+  grunt.loadNpmTasks "grunt-simple-mocha"
 
   ## default 
-  grunt.registerTask "default", "test copy jaded coffee contract watch"
+  grunt.registerTask "default", "simplemocha copy jaded coffee contract watch"
 
   #grunt.registerTask "wipePublic", ""
 
@@ -98,55 +95,3 @@ module.exports = (grunt) ->
     file = grunt.file.expandFiles(@file.src)[0]
     contract = coffee.eval (grunt.file.read file), bare: true
     require('shaman').start contract, path.resolve(__dirname, '..')
-
-  ## grunt-jaded
-  grunt.registerMultiTask "jaded", "compile jaded templates", ->
-    jaded = require 'jaded'  
-    files = grunt.file.expandFiles(@file.src)
-    {basename, extname}  = require 'path'
-    for file in files
-      n = basename file, extname file
-      template = jaded.compile grunt.file.read(file), 
-        development: true
-        rivets: false
-        amd: true
-        filename: file
-      grunt.file.mkdir "#{app.paths.public}/templates/"
-      grunt.file.write "#{app.paths.public}/templates/"+n+".js" , template
-
-  ## grunt-mocha-node
-  grunt.registerMultiTask "test", "Run unit tests with Mocha", ->
-    # tell grunt this is an asynchronous task
-    done = @async()
-
-    for key of require.cache
-      if require.cache[key]
-        delete require.cache[key]
-
-        console.warn "Mocha grunt task: Could not delete from require cache:\n" + key  if require.cache[key]
-      else
-        console.warn "Mocha grunt task: Could not find key in require cache:\n" + key
-
-    # load the options if they are specified
-    if typeof options is 'object'
-      options = grunt.config(["mocha", @target, "options"])
-    else
-      options = grunt.config("mocha.options") 
-    
-    # create a mocha instance with our options
-    mocha = new Mocha(options)
-
-    # add files to mocha
-    for file in grunt.file.expandFiles(@file.src)
-      mocha.addFile file
-
-    # run mocha asynchronously and catch errors!! (again, in case we are running this task in watch)
-
-    try
-      mocha.run (failureCount) ->
-        console.log "Mocha completed with " + failureCount + " failing tests"
-        done failureCount is 0
-    catch e
-      console.log "Mocha exploded!"
-      console.log e.stack
-      done false
