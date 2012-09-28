@@ -22,7 +22,7 @@ gruntConfig =
         bare: true
     services:
       src: [ "#{app.paths.app}/views/**/*.coffee" ]
-      dest:  "#{app.paths.public}/js/services"
+      dest:  "#{app.paths.public}/js/routes"
       options:
         bare: true
     vendor:
