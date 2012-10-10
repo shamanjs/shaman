@@ -7,33 +7,33 @@ gruntConfig =
   pkg: "<json:package.json>"
   simplemocha: 
     all:
-      src: ["#{app.paths.app}/**/*.spec.coffee"]
+      src: ["app/**/*.spec.coffee"]
       options: 
         reporter:    'spec'
         ui:          'exports'
         ignoreLeaks: 'true'
   contract:
-    files: "#{app.paths.app}/**/contract.coffee"
+    files: "app/**/contract.coffee"
   coffee:
     app:
-      src: [ "#{app.paths.client}/js/*.coffee" ]
-      dest:  "#{app.paths.public}/js"
+      src: [ "build/webapp/client/js/*.coffee" ]
+      dest:  "build/webapp/public/js"
       options:
         bare: true
     services:
-      src: [ "#{app.paths.app}/views/**/*.coffee" ]
-      dest:  "#{app.paths.public}/js/routes"
+      src: [ "app/views/**/*.coffee" ]
+      dest:  "build/webapp/public/js/routes"
       options:
         bare: true
     vendor:
-      src: [ "#{app.paths.client}/js/vendor/*.coffee" ]
-      dest:  "#{app.paths.public}/js/vendor"
+      src: [ "build/webapp/client/js/vendor/*.coffee" ]
+      dest:  "build/webapp/public/js/vendor"
       options:
         bare: true
   jaded:
     app:
-      src: [ "#{app.paths.app}/views/**/*.jade" ]
-      dest:  "#{app.paths.public}/templates"
+      src: [ "app/views/**/*.jade" ]
+      dest:  "build/webapp/public/templates"
       options:
         amd: true
         development: false
@@ -42,21 +42,21 @@ gruntConfig =
   copy:
     dist: 
       files: 
-        "build/webapp/public/js/vendor/": "#{app.paths.client}/js/vendor/**"
-        "build/webapp/public/css/":       "#{app.paths.client}/css/**"
-        "build/webapp/public/img/":       "#{app.paths.client}/img/**"
-        "build/webapp/public/dev/":       "#{app.paths.client}/dev/**"
-        "build/webapp/public/":           "#{app.paths.client}/index.html"
+        "build/webapp/public/js/vendor/": "build/webapp/client/js/vendor/**"
+        "build/webapp/public/css/":       "build/webapp/client/css/**"
+        "build/webapp/public/img/":       "build/webapp/client/img/**"
+        "build/webapp/public/dev/":       "build/webapp/client/dev/**"
+        "build/webapp/public/":           "build/webapp/client/index.html"
   reload: {}  
   watch:
     services:
-      files: "#{app.paths.app}/**/services/**/*.coffee"
+      files: "app/**/services/**/*.coffee"
       tasks: "mocha"
     client: 
       files: [
-        "#{app.paths.client}/js/vendor/**",
-        "#{app.paths.client}/css/**",
-        "#{app.paths.client}/index.html"
+        "build/webapp/client/js/vendor/**",
+        "build/webapp/client/css/**",
+        "build/webapp/client/index.html"
       ]
       tasks: "copy reload"
     jaded:

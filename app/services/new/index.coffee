@@ -19,8 +19,6 @@ module.exports = (appName, jobs) ->
     return log.error err if err? 
     profile.new(jobs)
 
-  #if jobs? # then install and apply them
-
   log.info "#{appName} created"
 
 
