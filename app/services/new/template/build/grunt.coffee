@@ -37,7 +37,7 @@ gruntConfig =
       options:
         amd: true
         development: false
-        rivets: true
+        rivets: false
   # dest: src 
   copy:
     dist: 
