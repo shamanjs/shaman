@@ -17,7 +17,7 @@ module.exports = (appName, jobs) ->
   pwd()
   clone templatePath, appPath, profile, (err) ->
     return log.error err if err? 
-    profile.new(jobs)
+    profile.create(jobs)
 
   log.info "#{appName} created"
 
