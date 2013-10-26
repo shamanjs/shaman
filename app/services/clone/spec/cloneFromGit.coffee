@@ -1,0 +1,3 @@
+cloneFromGit = require '../cloneFromGit'
+
+cloneFromGit()

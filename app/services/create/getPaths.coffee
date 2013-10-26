@@ -10,7 +10,7 @@ module.exports = (appName) ->
     log.error "#{appPath} already exists" 
     process.exit()
   # TODO: check if app exists on github
-  shamanPath = path.join getUserHome(), 'shaman' 
+  shamanPath = path.join getUserHome(), '.shaman' 
   # TODO: support template overrides
   template = path.join __dirname, './template' 
   if !(fs.existsSync template)

@@ -1,8 +1,8 @@
 require 'shelljs/global'
 log         = require 'node-log'
-getPaths    = require './getPaths'
-getProfile  = require './getProfile'
-clone       = require '../clone'
+getPaths     = require './getPaths'
+getProfile   = require './getProfile'
+cloneFromGit = require '../clone/cloneFromGit'
 
 module.exports = (appName, jobs) -> 
 
@@ -15,12 +15,19 @@ module.exports = (appName, jobs) ->
   mkdir '-p', appPath
   cd appPath
   pwd()
-  clone templatePath, appPath, profile, (err) ->
+  cloneFromGit appPath, profile, (err) ->
     return log.error err if err? 
-    profile.create(jobs)
+    log.info "creating #{appName}..."
+    
+    # run profile "new" config
+    profile.new log, ->
 
-  log.info "#{appName} created"
+      ## TODO: 
 
+      # install jobs specified on cli from npm
+      #npm.commands.install (jobs.map (job) -> "shaman-#{job}"), (err, data) ->
+      #  return log.error err if err?
+      #  log.info "#{appName} created"
 
-  
+      # save modules into npm file
   

@@ -1,9 +1,9 @@
 {
   "name": "shaman",
-  "description": "summons agents",
+  "description": "create apps",
   "version": "0.0.1",
-  "homepage": "https://github.com/shaman/shaman",
-  "author": {},
+  "homepage": "https://github.com/shamanjs/shaman",
+  "author": "fractal",
   "bin": {
     "shaman": "./build/jobs/cli/index"
   },
@@ -26,15 +26,13 @@
   },
   "dependencies": {
     "coffee-script": "*",
-    "connect": "~2.4.4",
-    "vein": "~0.4.0",
     "mori": "~0.1.0",
     "underscore": "~1.3.3",
     "shelljs": "0.0.6",
     "async": "~0.1.22",
-    "npm": "~1.1.61",
-    "volo": "~0.2.3",
-    "node-log": "0.0.3"
+    "node-log": "0.0.3",
+    "npm": "~1.3.12",
+    "gift": "~0.1.1"
   },
   "devDependencies": {
     "mocha": "*",
